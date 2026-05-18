@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRPF 2026 — Controle de Declarações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1C1B20;--ink2:#4A4858;--ink3:#8E8CA0;
+  --cream:#F5F3EE;--surface:#FFFFFF;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --hero:#1E2A3A;--hero-text:#E8EEF6;--hero-sub:#8DA3BF;--hero-border:rgba(255,255,255,0.08);
+  --green:#1A7A4A;--green-bg:#E6F7EE;--green-border:#A8DFC1;
+  --amber:#8A5C00;--amber-bg:#FFF5DC;--amber-border:#F5D98A;
+  --blue:#1B4F91;--blue-bg:#E8F0FB;--blue-border:#A3C0EE;
+  --purple:#5C2E8A;--purple-bg:#F0E8FA;--purple-border:#C9A8EE;
+  --red:#991B1B;--red-bg:#FEE8E8;--red-border:#F5AAAA;
+  --teal:#0D6B5E;--teal-bg:#E0F5F2;--teal-border:#8ADDD3;
+  --r:10px;--r-lg:16px;--r-xl:20px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+
+/* SETUP SCREEN */
+.setup-screen{display:none;position:fixed;inset:0;background:var(--cream);z-index:999;padding:24px;overflow-y:auto;}
+.setup-screen.active{display:flex;align-items:flex-start;justify-content:center;}
+.setup-box{max-width:560px;width:100%;background:var(--surface);border-radius:var(--r-xl);border:1px solid var(--border2);padding:32px;margin-top:40px;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
+.setup-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;letter-spacing:-0.3px;}
+.setup-sub{font-size:13px;color:var(--ink2);margin-bottom:24px;line-height:1.6;}
+.setup-step{margin-bottom:18px;padding:14px 16px;background:var(--cream);border-radius:var(--r);border-left:3px solid var(--blue);}
+.setup-step-num{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.setup-step-txt{font-size:13px;color:var(--ink2);line-height:1.55;}
+.setup-step-txt a{color:var(--blue);text-decoration:underline;}
+.setup-step-txt code{background:rgba(0,0,0,0.06);padding:1px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;}
+.setup-textarea{width:100%;min-height:140px;font-family:'DM Mono',monospace;font-size:12px;padding:12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--cream);resize:vertical;line-height:1.5;}
+.setup-textarea:focus{outline:none;border-color:#5B8FD4;box-shadow:0 0 0 3px rgba(91,143,212,0.12);}
+.setup-actions{display:flex;gap:8px;margin-top:18px;}
+.setup-btn-ok{flex:1;padding:11px;border-radius:var(--r);border:none;background:var(--hero);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+.setup-btn-ok:hover{opacity:0.88;}
+.setup-btn-skip{padding:11px 18px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+.setup-btn-skip:hover{background:var(--cream);}
+.setup-error{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);padding:10px 14px;border-radius:var(--r);font-size:13px;margin-top:12px;display:none;}
+.setup-error.show{display:block;}
+
+/* SYNC STATUS */
+.sync-dot{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--hero-sub);padding:4px 10px;background:rgba(255,255,255,0.08);border-radius:20px;border:1px solid rgba(255,255,255,0.12);}
+.sync-dot.online::before{content:'';width:6px;height:6px;border-radius:50%;background:#5EDEA0;display:inline-block;}
+.sync-dot.offline::before{content:'';width:6px;height:6px;border-radius:50%;background:#FF8F8F;display:inline-block;}
+.sync-dot.syncing::before{content:'';width:6px;height:6px;border-radius:50%;background:#FFD080;display:inline-block;animation:pulse 1s infinite;}
+@keyframes pulse{50%{opacity:0.4;}}
+
+/* HERO */
+.hero{background:var(--hero);padding:24px 32px 0;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-100px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(100,160,255,0.06) 0%,transparent 70%);pointer-events:none;}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.brand-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--hero-text);letter-spacing:-0.3px;}
+.brand-sub{font-size:12px;color:var(--hero-sub);margin-top:3px;font-weight:300;}
+.hero-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.new-btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:9px 18px;border-radius:var(--r);border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:var(--hero-text);cursor:pointer;display:flex;align-items:center;gap:7px;transition:all 0.15s;white-space:nowrap;}
+.new-btn:hover{background:rgba(255,255,255,0.18);}
+
+.stats-strip{display:grid;grid-template-columns:repeat(8,1fr);border-top:1px solid var(--hero-border);}
+.stat-item{padding:14px 16px;border-right:1px solid var(--hero-border);min-width:0;}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--hero-text);letter-spacing:-0.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat-num.mono{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+.stat-num.s-green{color:#5EDEA0;}.stat-num.s-red{color:#FF8F8F;}.stat-num.s-amber{color:#FFD080;}
+.stat-lbl{font-size:9px;color:var(--hero-sub);text-transform:uppercase;letter-spacing:0.7px;margin-top:4px;white-space:nowrap;}
+
+.prazo-banner{background:rgba(255,180,50,0.12);border-top:1px solid rgba(255,180,50,0.2);padding:8px 32px;display:flex;align-items:center;gap:8px;font-size:12px;color:#FFD080;}
+.prazo-banner b{font-weight:600;}
+
+.content{max-width:920px;margin:0 auto;padding:20px 16px 64px;}
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:180px;max-width:260px;}
+.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--ink3);pointer-events:none;}
+.search-input{font-family:'DM Sans',sans-serif;font-size:13px;width:100%;padding:7px 10px 7px 32px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);color:var(--ink);transition:border-color 0.15s;}
+.search-input:focus{outline:none;border-color:#5B8FD4;box-shadow:0 0 0 3px rgba(91,143,212,0.12);}
+.search-input::placeholder{color:var(--ink3);}
+.sort-select{font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);color:var(--ink2);cursor:pointer;}
+.sort-select:focus{outline:none;}
+
+.filters{display:flex;gap:5px;flex-wrap:wrap;align-items:center;}
+.f-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--ink2);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.f-btn:hover{border-color:var(--ink3);color:var(--ink);}
+.f-btn.active{background:var(--hero);color:var(--hero-text);border-color:var(--hero);}
+.f-add{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:7px 16px;border-radius:var(--r);border:none;background:var(--hero);color:#fff;cursor:pointer;transition:opacity 0.15s;white-space:nowrap;}
+.f-add:hover{opacity:0.85;}
+
+.list{display:flex;flex-direction:column;gap:8px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color 0.15s,box-shadow 0.15s;}
+.card:hover{border-color:var(--border2);box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.card.pago-sim{border-left:3px solid #1A7A4A;}
+.card-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none;}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif;}
+.card-info{flex:1;min-width:0;}
+.card-name{font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;}
+.tag{font-size:11px;color:var(--ink3);font-weight:300;}
+.tag-sep{font-size:11px;color:var(--ink3);}
+.val-tag{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;background:var(--green-bg);color:var(--green);padding:1px 7px;border-radius:20px;border:1px solid var(--green-border);}
+.pago-tag{font-size:10px;font-weight:600;background:var(--green-bg);color:var(--green);padding:1px 7px;border-radius:20px;border:1px solid var(--green-border);}
+.npago-tag{font-size:10px;font-weight:600;background:var(--red-bg);color:var(--red);padding:1px 7px;border-radius:20px;border:1px solid var(--red-border);}
+.card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.status-pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;white-space:nowrap;border:1px solid transparent;}
+.chevron{font-size:11px;color:var(--ink3);transition:transform 0.2s;font-style:normal;}
+.card.open .chevron{transform:rotate(180deg);}
+.prog-wrap{height:2px;background:#F0EEE8;}
+.prog-fill{height:2px;background:var(--blue);transition:width 0.4s;}
+.prog-fill.full{background:var(--green);}
+.card-body{display:none;padding:16px;border-top:1px solid var(--border);background:#FDFCFA;}
+.card.open .card-body{display:block;}
+.sec-lbl{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;font-weight:500;margin-bottom:9px;}
+.steps-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px;}
+.chip{display:flex;align-items:center;gap:4px;font-size:12px;font-family:'DM Sans',sans-serif;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--ink2);cursor:pointer;transition:all 0.15s;user-select:none;}
+.chip:hover{background:var(--cream);}
+.chip.done{background:var(--green-bg);border-color:var(--green-border);color:var(--green);font-weight:500;}
+.chip-ico{font-style:normal;font-size:11px;}
+.divider{height:1px;background:var(--border);margin:12px 0;}
+.fields-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+.fld{display:flex;flex-direction:column;gap:4px;}
+.fld-lbl{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.6px;font-weight:500;}
+.fld-input,.fld-select,.fld-textarea{font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:8px 11px;width:100%;transition:border-color 0.15s,box-shadow 0.15s;}
+.fld-input:focus,.fld-select:focus,.fld-textarea:focus{outline:none;border-color:#5B8FD4;box-shadow:0 0 0 3px rgba(91,143,212,0.12);}
+.fld-input.mono{font-family:'DM Mono',monospace;font-size:13px;}
+.fld-textarea{resize:vertical;min-height:68px;line-height:1.55;}
+.pago-toggle{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);cursor:pointer;transition:all 0.15s;user-select:none;}
+.pago-toggle.sim{background:var(--green-bg);border-color:var(--green-border);}
+.pago-toggle-dot{width:32px;height:18px;border-radius:9px;background:#D0CECC;transition:background 0.2s;position:relative;flex-shrink:0;}
+.pago-toggle-dot::after{content:'';position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:#fff;transition:left 0.2s;}
+.pago-toggle.sim .pago-toggle-dot{background:var(--green);}
+.pago-toggle.sim .pago-toggle-dot::after{left:17px;}
+.pago-toggle-lbl{font-size:13px;font-weight:500;color:var(--ink2);}
+.pago-toggle.sim .pago-toggle-lbl{color:var(--green);}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.btn-save{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:8px 18px;border-radius:var(--r);border:none;background:var(--hero);color:#fff;cursor:pointer;transition:opacity 0.15s;}
+.btn-save:hover{opacity:0.88;}
+.saved-msg{font-size:12px;color:var(--green);font-weight:500;display:none;}
+.btn-del{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;border-radius:var(--r);border:1px solid var(--red-border);background:transparent;color:var(--red);cursor:pointer;transition:background 0.15s;}
+.btn-del:hover{background:var(--red-bg);}
+.update-ts{font-size:11px;color:var(--ink3);margin-top:10px;font-style:italic;}
+.empty{text-align:center;padding:3rem;color:var(--ink3);font-size:14px;}
+
+.confirm-bg{display:none;position:fixed;inset:0;background:rgba(20,18,30,0.45);z-index:400;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px);}
+.confirm-bg.open{display:flex;}
+.confirm-box{background:var(--surface);border-radius:var(--r-xl);border:1px solid var(--border2);padding:24px;width:min(360px,100%);box-shadow:0 20px 60px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:14px;}
+.confirm-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+.confirm-msg{font-size:13px;color:var(--ink2);line-height:1.5;}
+.confirm-actions{display:flex;gap:8px;justify-content:flex-end;}
+.btn-cancel-sm{font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
+.btn-cancel-sm:hover{background:var(--cream);}
+.btn-danger{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 18px;border-radius:var(--r);border:none;background:var(--red);color:#fff;cursor:pointer;}
+.btn-danger:hover{opacity:0.88;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(20,18,30,0.45);z-index:300;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px);}
+.modal-bg.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--r-xl);border:1px solid var(--border2);padding:24px;width:min(480px,100%);display:flex;flex-direction:column;gap:13px;box-shadow:0 20px 60px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.2px;}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
+.btn-cancel{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:9px 18px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
+.btn-cancel:hover{background:var(--cream);}
+.btn-ok{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 22px;border-radius:var(--r);border:none;background:var(--hero);color:#fff;cursor:pointer;}
+.btn-ok:hover{opacity:0.88;}
+
+@media(max-width:700px){
+  .hero{padding:18px 14px 0;}
+  .stats-strip{grid-template-columns:repeat(4,1fr);}
+  .stat-item:nth-child(n+5){display:none;}
+  .prazo-banner{padding:8px 14px;}
+  .content{padding:14px 10px 60px;}
+  .toolbar{gap:6px;}
+  .filters{order:3;width:100%;}
+  .f-add{order:2;}
+  .fields-grid{grid-template-columns:1fr 1fr;}
+  .modal-row{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  .stats-strip{grid-template-columns:repeat(2,1fr);}
+  .stat-item:nth-child(n+3){display:none;}
+  .card-head{padding:11px 12px;}
+  .card-body{padding:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div class="setup-screen" id="setup-screen">
+  <div class="setup-box">
+    <div class="setup-title">⚙️ Configuração inicial — Firebase</div>
+    <div class="setup-sub">Cole abaixo o objeto <code>firebaseConfig</code> copiado do seu projeto Firebase. Depois disso, seus dados ficarão sincronizados entre PC e celular automaticamente.</div>
+
+    <div class="setup-step">
+      <div class="setup-step-num">PASSO 1</div>
+      <div class="setup-step-txt">Acesse <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a>, crie um projeto e ative o <b>Realtime Database</b> (modo teste).</div>
+    </div>
+    <div class="setup-step">
+      <div class="setup-step-num">PASSO 2</div>
+      <div class="setup-step-txt">Em <code>Configurações do projeto → Seus aplicativos</code>, registre um app Web e copie o objeto <code>firebaseConfig</code>.</div>
+    </div>
+    <div class="setup-step">
+      <div class="setup-step-num">PASSO 3</div>
+      <div class="setup-step-txt">Cole abaixo (o trecho inteiro, incluindo as chaves <code>{...}</code>):</div>
+    </div>
+
+    <textarea class="setup-textarea" id="setup-config" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "seu-projeto.firebaseapp.com",
+  "databaseURL": "https://seu-projeto-default-rtdb.firebaseio.com",
+  "projectId": "seu-projeto",
+  ...
+}'></textarea>
+    <div class="setup-error" id="setup-error"></div>
+    <div class="setup-actions">
+      <button class="setup-btn-skip" onclick="skipSetup()">Usar offline (só este dispositivo)</button>
+      <button class="setup-btn-ok" onclick="saveSetup()">Conectar e sincronizar</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-top">
+    <div class="brand">
+      <div class="brand-icon">📋</div>
+      <div>
+        <div class="brand-title">IRPF 2026 — Declarações</div>
+        <div class="brand-sub" id="hero-sub">Competência 2025 · Prazo: 30/05/2026</div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <span class="sync-dot" id="sync-dot">Offline</span>
+      <button class="new-btn" onclick="openModal()">+ Novo cliente</button>
+    </div>
+  </div>
+  <div class="stats-strip" id="stats-strip"></div>
+</div>
+
+<div class="prazo-banner" id="prazo-banner">
+  ⏰ <b>Prazo da Receita Federal:</b> <span id="prazo-txt"></span>
+</div>
+
+<div class="content">
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-ico">🔍</span>
+      <input class="search-input" type="text" id="search-input" placeholder="Buscar cliente..." oninput="render()">
+    </div>
+    <select class="sort-select" id="sort-select" onchange="render()">
+      <option value="nome">Ordenar: Nome</option>
+      <option value="status">Ordenar: Status</option>
+      <option value="pct">Ordenar: Progresso</option>
+      <option value="valor">Ordenar: Valor</option>
+      <option value="recente">Ordenar: Atualizado</option>
+    </select>
+    <button class="f-add" onclick="openModal()">+ Novo cliente</button>
+  </div>
+  <div class="filters" style="margin-bottom:16px;">
+    <button class="f-btn active" onclick="setFilter('todos',this)">Todos</button>
+    <button class="f-btn" onclick="setFilter('aguardando_docs',this)">Aguard. docs</button>
+    <button class="f-btn" onclick="setFilter('em_analise',this)">Em análise</button>
+    <button class="f-btn" onclick="setFilter('em_preenchimento',this)">Preenchimento</button>
+    <button class="f-btn" onclick="setFilter('aguardando_envio',this)">Ag. envio</button>
+    <button class="f-btn" onclick="setFilter('enviado',this)">Enviado</button>
+    <button class="f-btn" onclick="setFilter('cobranca',this)">Cobrança</button>
+    <button class="f-btn" onclick="setFilter('concluido',this)">Concluído</button>
+  </div>
+  <div class="list" id="list"></div>
+</div>
+
+<div class="confirm-bg" id="confirm-bg">
+  <div class="confirm-box">
+    <div class="confirm-title">Remover cliente</div>
+    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-actions">
+      <button class="btn-cancel-sm" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-danger" id="confirm-ok">Remover</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-title">Novo cliente</div>
+    <div class="fld">
+      <div class="fld-lbl">Nome completo *</div>
+      <input class="fld-input" type="text" id="m-nome" placeholder="Ex: Maria da Silva" />
+    </div>
+    <div class="modal-row">
+      <div class="fld">
+        <div class="fld-lbl">Tipo</div>
+        <select class="fld-select" id="m-tipo">
+          <option value="PF">PF — Pessoa Física</option>
+          <option value="Casal">Casal</option>
+          <option value="PJ">PJ</option>
+          <option value="MEI">MEI</option>
+        </select>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Honorários (R$)</div>
+        <input class="fld-input mono" type="text" id="m-valor" placeholder="0,00" oninput="maskMoney(this)" />
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="fld">
+        <div class="fld-lbl">Status inicial</div>
+        <select class="fld-select" id="m-status">
+          <option value="aguardando_docs">Aguardando documentos</option>
+          <option value="em_analise">Em análise</option>
+          <option value="em_preenchimento">Em preenchimento</option>
+          <option value="aguardando_envio">Aguardando envio</option>
+          <option value="enviado">Enviado</option>
+          <option value="cobranca">Cobrança</option>
+          <option value="concluido">Concluído</option>
+        </select>
+      </div>
+      <div class="fld">
+        <div class="fld-lbl">Prazo do cliente</div>
+        <input class="fld-input" type="date" id="m-prazo" />
+      </div>
+    </div>
+    <div class="fld">
+      <div class="fld-lbl">Observações</div>
+      <textarea class="fld-textarea" id="m-obs" rows="2" placeholder="Pendências, informações importantes..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-ok" onclick="addClient()">Adicionar cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  window._fb = { initializeApp, getDatabase, ref, set, onValue, remove, update };
+  window.dispatchEvent(new Event('fb-ready'));
+</script>
+
+<script>
+const STEPS=[
+  {id:'docs',label:'Documentos',ico:'📄'},
+  {id:'analise',label:'Análise',ico:'🔍'},
+  {id:'preenchimento',label:'Preenchimento',ico:'✏️'},
+  {id:'revisao',label:'Revisão',ico:'✅'},
+  {id:'envio',label:'Envio',ico:'📤'},
+  {id:'cobranca',label:'Cobrança',ico:'💰'},
+];
+const SM={
+  aguardando_docs:{label:'Aguardando docs',bg:'#FFF5DC',color:'#8A5C00',border:'#F5D98A',order:1},
+  em_analise:{label:'Em análise',bg:'#E8F0FB',color:'#1B4F91',border:'#A3C0EE',order:2},
+  em_preenchimento:{label:'Preenchimento',bg:'#F0E8FA',color:'#5C2E8A',border:'#C9A8EE',order:3},
+  aguardando_envio:{label:'Ag. envio',bg:'#FFF5DC',color:'#7A4800',border:'#F5C97A',order:4},
+  enviado:{label:'Enviado',bg:'#E6F7EE',color:'#1A7A4A',border:'#A8DFC1',order:5},
+  cobranca:{label:'Cobrança',bg:'#FEE8E8',color:'#991B1B',border:'#F5AAAA',order:6},
+  concluido:{label:'Concluído ✓',bg:'#E0F5F2',color:'#0D6B5E',border:'#8ADDD3',order:7},
+};
+const AV=[
+  {bg:'#E8F0FB',c:'#1B4F91'},{bg:'#E0F5F2',c:'#0D6B5E'},{bg:'#F0E8FA',c:'#5C2E8A'},
+  {bg:'#FFF5DC',c:'#8A5C00'},{bg:'#FEE8E8',c:'#991B1B'},{bg:'#E6F7EE',c:'#1A7A4A'},
+  {bg:'#F5EEE8',c:'#7A4500'},{bg:'#E8EEF6',c:'#2A4A7A'},
+];
+
+const INIT=[
+  {id:1,nome:'Lívia Rocha Helmer',tipo:'PF',status:'em_preenchimento',valor:'',pago:false,prazo:'2026-05-30',
+   obs:'Declaração preenchida — pendente: nº registro profissional (psicóloga) e NIS/PIS.',
+   steps:{docs:true,analise:true,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+  {id:2,nome:'Luan & Karol',tipo:'Casal',status:'em_analise',valor:'',pago:false,prazo:'2026-05-30',
+   obs:'Documentos recebidos. Análise ainda não iniciada.',
+   steps:{docs:true,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+  {id:3,nome:'Laís',tipo:'PF',status:'aguardando_docs',valor:'',pago:false,prazo:'2026-05-30',obs:'',
+   steps:{docs:false,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+  {id:4,nome:'Rayner & Larissa',tipo:'Casal',status:'aguardando_docs',valor:'',pago:false,prazo:'2026-05-30',obs:'',
+   steps:{docs:false,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+  {id:5,nome:'Guilherme',tipo:'PF',status:'em_analise',valor:'',pago:false,prazo:'2026-05-30',
+   obs:'Documentos recebidos. Análise ainda não iniciada.',
+   steps:{docs:true,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+  {id:6,nome:'Amanda',tipo:'PF',status:'em_analise',valor:'',pago:false,prazo:'2026-05-30',
+   obs:'Documentos recebidos. Análise ainda não iniciada.',
+   steps:{docs:true,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+  {id:7,nome:'Leonardo Panaro',tipo:'PF',status:'aguardando_docs',valor:'',pago:false,prazo:'2026-05-30',
+   obs:'Realizar declarações dos últimos 5 anos — apenas imóveis como Bens e Direitos. Em 2025 houve doação de imóvel para um dos filhos.',
+   steps:{docs:false,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},updated:Date.now()},
+];
+
+const LS_CONFIG='irpf26_fb_config';
+const LS_DATA='irpf26_local_data';
+const LS_OFFLINE='irpf26_offline_mode';
+
+let clients=[],nextId=50,filterStatus='todos';
+let useFirebase=false, fbDb=null, fbRef=null;
+
+/* ========== SETUP / FIREBASE ========== */
+function showSetup(){document.getElementById('setup-screen').classList.add('active');}
+function hideSetup(){document.getElementById('setup-screen').classList.remove('active');}
+
+function saveSetup(){
+  const txt=document.getElementById('setup-config').value.trim();
+  const err=document.getElementById('setup-error');
+  err.classList.remove('show');
+  if(!txt){err.textContent='Cole a configuração do Firebase.';err.classList.add('show');return;}
+  let cfg;
+  try{
+    // Allow either {...} or "const firebaseConfig = {...};"
+    let json=txt;
+    if(!json.startsWith('{')){
+      const m=json.match(/\{[\s\S]*\}/);
+      if(m)json=m[0];
+    }
+    // Convert JS object syntax to JSON (add quotes to keys)
+    json=json.replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g,'$1"$2":').replace(/'/g,'"').replace(/,(\s*[}\]])/g,'$1');
+    cfg=JSON.parse(json);
+    if(!cfg.apiKey||!cfg.databaseURL){throw new Error('Faltam campos apiKey ou databaseURL.');}
+  }catch(e){err.textContent='Erro ao ler configuração: '+e.message;err.classList.add('show');return;}
+  localStorage.setItem(LS_CONFIG,JSON.stringify(cfg));
+  localStorage.removeItem(LS_OFFLINE);
+  location.reload();
+}
+
+function skipSetup(){
+  localStorage.setItem(LS_OFFLINE,'1');
+  hideSetup();
+  loadLocal();
+  render();
+}
+
+function setSyncStatus(state,txt){
+  const el=document.getElementById('sync-dot');
+  el.className='sync-dot '+state;
+  el.textContent=txt;
+}
+
+function initFirebase(){
+  const cfgStr=localStorage.getItem(LS_CONFIG);
+  if(!cfgStr)return false;
+  try{
+    const cfg=JSON.parse(cfgStr);
+    const app=window._fb.initializeApp(cfg);
+    fbDb=window._fb.getDatabase(app);
+    fbRef=window._fb.ref(fbDb,'irpf2026/data');
+    setSyncStatus('syncing','Conectando...');
+
+    window._fb.onValue(fbRef,(snap)=>{
+      const v=snap.val();
+      if(v&&v.c){
+        clients=v.c;
+        nextId=v.n||50;
+        setSyncStatus('online','Sincronizado');
+      } else {
+        // First time — push the initial data
+        clients=JSON.parse(JSON.stringify(INIT));
+        nextId=50;
+        pushToFirebase();
+        setSyncStatus('online','Sincronizado');
+      }
+      render();
+    },(err)=>{
+      console.error('Firebase error:',err);
+      setSyncStatus('offline','Erro: '+err.message);
+    });
+    useFirebase=true;
+    return true;
+  }catch(e){
+    console.error(e);
+    setSyncStatus('offline','Erro de configuração');
+    return false;
+  }
+}
+
+function pushToFirebase(){
+  if(!useFirebase||!fbRef)return;
+  setSyncStatus('syncing','Salvando...');
+  window._fb.set(fbRef,{c:clients,n:nextId})
+    .then(()=>setSyncStatus('online','Sincronizado'))
+    .catch(e=>{setSyncStatus('offline','Erro ao salvar');console.error(e);});
+}
+
+function loadLocal(){
+  try{
+    const r=localStorage.getItem(LS_DATA);
+    if(r){const d=JSON.parse(r);clients=d.c||[];nextId=d.n||50;}
+    else{clients=JSON.parse(JSON.stringify(INIT));saveLocal();}
+  }catch(e){clients=JSON.parse(JSON.stringify(INIT));}
+  setSyncStatus('offline','Offline (este dispositivo)');
+}
+function saveLocal(){try{localStorage.setItem(LS_DATA,JSON.stringify({c:clients,n:nextId}));}catch(e){}}
+
+function persist(){
+  if(useFirebase)pushToFirebase();
+  else saveLocal();
+}
+
+/* ========== HELPERS ========== */
+function maskMoney(el){
+  let v=el.value.replace(/\D/g,'');
+  if(!v){el.value='';return;}
+  v=(parseInt(v,10)/100).toFixed(2);
+  el.value=parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function parseBRL(s){return parseFloat((s||'').replace(/\./g,'').replace(',','.'))||0;}
+function fmtBRL(v){return v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtDate(ts){if(!ts)return'';return new Date(ts).toLocaleDateString('pt-BR')+' às '+new Date(ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function initials(n){const w=n.trim().split(/\s+/);if(w.length===1)return w[0].slice(0,2).toUpperCase();return(w[0][0]+w[w.length-1][0]).toUpperCase();}
+function avC(id){return AV[id%AV.length];}
+function pct(c){return Math.round(Object.values(c.steps||{}).filter(Boolean).length/STEPS.length*100);}
+
+function prazoCountdown(){
+  const prazo=new Date('2026-05-30');
+  const hoje=new Date();hoje.setHours(0,0,0,0);prazo.setHours(0,0,0,0);
+  const diff=Math.round((prazo-hoje)/(1000*60*60*24));
+  if(diff<0)return'Prazo encerrado em 30/05/2026.';
+  if(diff===0)return'HOJE é o último dia! 30/05/2026.';
+  if(diff===1)return'Falta 1 dia — prazo: 30/05/2026.';
+  return`Faltam ${diff} dias — prazo: 30/05/2026.`;
+}
+
+function calcStats(){
+  let total=clients.length,byS={},tv=0,rv=0,pend=0;
+  clients.forEach(c=>{
+    byS[c.status]=(byS[c.status]||0)+1;
+    const v=parseBRL(c.valor);
+    tv+=v;
+    if(c.pago)rv+=v; else pend+=v;
+  });
+  return{total,byS,tv,rv,pend};
+}
+
+/* ========== ACTIONS ========== */
+function setFilter(f,btn){
+  filterStatus=f;
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+function toggleCard(id){document.getElementById('card-'+id)?.classList.toggle('open');}
+function toggleStep(cid,step){
+  const c=clients.find(x=>x.id===cid);if(!c)return;
+  if(!c.steps)c.steps={};
+  c.steps[step]=!c.steps[step];c.updated=Date.now();persist();
+  const wasOpen=document.getElementById('card-'+cid)?.classList.contains('open');
+  render();
+  if(wasOpen)document.getElementById('card-'+cid)?.classList.add('open');
+}
+function togglePago(cid){
+  const c=clients.find(x=>x.id===cid);if(!c)return;
+  c.pago=!c.pago;c.updated=Date.now();persist();
+  const wasOpen=document.getElementById('card-'+cid)?.classList.contains('open');
+  render();
+  if(wasOpen)document.getElementById('card-'+cid)?.classList.add('open');
+}
+function saveClient(cid){
+  const c=clients.find(x=>x.id===cid);if(!c)return;
+  c.obs=document.getElementById('obs-'+cid)?.value||'';
+  c.status=document.getElementById('status-'+cid)?.value||c.status;
+  c.valor=document.getElementById('valor-'+cid)?.value||'';
+  c.prazo=document.getElementById('prazo-'+cid)?.value||'';
+  c.updated=Date.now();persist();
+  render();
+  document.getElementById('card-'+cid)?.classList.add('open');
+  const msg=document.getElementById('saved-'+cid);
+  if(msg){msg.style.display='inline';setTimeout(()=>{msg.style.display='none';},2200);}
+}
+
+function openConfirm(cid){
+  const c=clients.find(x=>x.id===cid);if(!c)return;
+  document.getElementById('confirm-msg').textContent='Tem certeza que deseja remover "'+c.nome+'" do painel? Esta ação não pode ser desfeita.';
+  document.getElementById('confirm-ok').onclick=()=>{clients=clients.filter(x=>x.id!==cid);persist();closeConfirm();render();};
+  document.getElementById('confirm-bg').classList.add('open');
+}
+function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open');}
+
+function openModal(){document.getElementById('modal-bg').classList.add('open');setTimeout(()=>document.getElementById('m-nome').focus(),50);}
+function closeModal(){
+  document.getElementById('modal-bg').classList.remove('open');
+  ['m-nome','m-valor','m-obs','m-prazo'].forEach(id=>{document.getElementById(id).value='';});
+}
+function addClient(){
+  const nome=document.getElementById('m-nome').value.trim();
+  if(!nome){alert('Informe o nome do cliente.');return;}
+  const c={
+    id:nextId++,nome,
+    tipo:document.getElementById('m-tipo').value,
+    status:document.getElementById('m-status').value,
+    valor:document.getElementById('m-valor').value,
+    pago:false,
+    prazo:document.getElementById('m-prazo').value||'2026-05-30',
+    obs:document.getElementById('m-obs').value.trim(),
+    steps:{docs:false,analise:false,preenchimento:false,revisao:false,envio:false,cobranca:false},
+    updated:Date.now()
+  };
+  clients.push(c);persist();closeModal();render();
+}
+
+function getSorted(list){
+  const sort=document.getElementById('sort-select')?.value||'nome';
+  return [...list].sort((a,b)=>{
+    if(sort==='nome')return a.nome.localeCompare(b.nome,'pt-BR');
+    if(sort==='status')return(SM[a.status]?.order||9)-(SM[b.status]?.order||9);
+    if(sort==='pct')return pct(b)-pct(a);
+    if(sort==='valor')return parseBRL(b.valor)-parseBRL(a.valor);
+    if(sort==='recente')return(b.updated||0)-(a.updated||0);
+    return 0;
+  });
+}
+
+function render(){
+  document.getElementById('prazo-txt').textContent=prazoCountdown();
+  const st=calcStats();
+  document.getElementById('stats-strip').innerHTML=`
+    <div class="stat-item"><div class="stat-num">${st.total}</div><div class="stat-lbl">Clientes</div></div>
+    <div class="stat-item"><div class="stat-num s-amber">${st.byS['aguardando_docs']||0}</div><div class="stat-lbl">Aguard. docs</div></div>
+    <div class="stat-item"><div class="stat-num">${(st.byS['em_analise']||0)+(st.byS['em_preenchimento']||0)}</div><div class="stat-lbl">Em andamento</div></div>
+    <div class="stat-item"><div class="stat-num s-green">${(st.byS['enviado']||0)+(st.byS['concluido']||0)}</div><div class="stat-lbl">Enviados</div></div>
+    <div class="stat-item"><div class="stat-num mono">R$&nbsp;${fmtBRL(st.tv)}</div><div class="stat-lbl">Total honor.</div></div>
+    <div class="stat-item"><div class="stat-num mono s-green">R$&nbsp;${fmtBRL(st.rv)}</div><div class="stat-lbl">Recebido</div></div>
+    <div class="stat-item"><div class="stat-num mono s-red">R$&nbsp;${fmtBRL(st.pend)}</div><div class="stat-lbl">A receber</div></div>
+    <div class="stat-item"><div class="stat-num">${st.byS['concluido']||0}</div><div class="stat-lbl">Concluídos</div></div>
+  `;
+
+  const q=(document.getElementById('search-input')?.value||'').toLowerCase().trim();
+  let visible=filterStatus==='todos'?clients:clients.filter(c=>c.status===filterStatus);
+  if(q)visible=visible.filter(c=>c.nome.toLowerCase().includes(q)||(c.obs||'').toLowerCase().includes(q));
+  visible=getSorted(visible);
+
+  if(!visible.length){
+    document.getElementById('list').innerHTML='<div class="empty">📂 Nenhum cliente encontrado.</div>';
+    return;
+  }
+
+  document.getElementById('list').innerHTML=visible.map((c)=>{
+    const sm=SM[c.status]||SM['aguardando_docs'];
+    const av=avC(c.id);
+    const p=pct(c);
+    const opts=Object.entries(SM).map(([k,v])=>`<option value="${k}" ${c.status===k?'selected':''}>${v.label}</option>`).join('');
+    const chips=STEPS.map(s=>`<span class="chip ${(c.steps&&c.steps[s.id])?'done':''}" onclick="toggleStep(${c.id},'${s.id}')"><span class="chip-ico">${(c.steps&&c.steps[s.id])?'✓':s.ico}</span>${s.label}</span>`).join('');
+    const valorTag=c.valor?`<span class="val-tag">R$&nbsp;${c.valor}</span>`:'';
+    const pagoTag=c.valor?(c.pago?'<span class="pago-tag">✓ Pago</span>':'<span class="npago-tag">Não pago</span>'):'';
+
+    return`<div class="card ${c.pago&&c.valor?'pago-sim':''}" id="card-${c.id}">
+      <div class="card-head" onclick="toggleCard(${c.id})">
+        <div class="avatar" style="background:${av.bg};color:${av.c}">${initials(c.nome)}</div>
+        <div class="card-info">
+          <div class="card-name">${c.nome}</div>
+          <div class="card-meta">
+            <span class="tag">${c.tipo}</span>
+            <span class="tag-sep">·</span>
+            <span class="tag">${p}% concluído</span>
+            ${valorTag}${pagoTag}
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="status-pill" style="background:${sm.bg};color:${sm.color};border-color:${sm.border}">${sm.label}</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+      <div class="prog-wrap"><div class="prog-fill ${p===100?'full':''}" style="width:${p}%"></div></div>
+      <div class="card-body">
+        <div class="sec-lbl">Etapas — clique para marcar/desmarcar</div>
+        <div class="steps-row">${chips}</div>
+        <div class="divider"></div>
+        <div class="fields-grid">
+          <div class="fld"><div class="fld-lbl">Status</div><select class="fld-select" id="status-${c.id}">${opts}</select></div>
+          <div class="fld"><div class="fld-lbl">Honorários (R$)</div><input class="fld-input mono" type="text" id="valor-${c.id}" value="${c.valor||''}" placeholder="0,00" oninput="maskMoney(this)" /></div>
+          <div class="fld"><div class="fld-lbl">Prazo / entrega</div><input class="fld-input" type="date" id="prazo-${c.id}" value="${c.prazo||''}" /></div>
+        </div>
+        <div class="fld" style="margin-bottom:12px">
+          <div class="fld-lbl">Situação do pagamento</div>
+          <div class="pago-toggle ${c.pago?'sim':''}" onclick="togglePago(${c.id})">
+            <div class="pago-toggle-dot"></div>
+            <span class="pago-toggle-lbl">${c.pago?'✓ Honorários recebidos':'Aguardando pagamento'}</span>
+          </div>
+        </div>
+        <div class="fld" style="margin-bottom:12px">
+          <div class="fld-lbl">Observações e pendências</div>
+          <textarea class="fld-textarea" id="obs-${c.id}" placeholder="Anotações, pendências, informações do cliente...">${c.obs||''}</textarea>
+        </div>
+        <div class="actions">
+          <button class="btn-save" onclick="saveClient(${c.id})">💾 Salvar</button>
+          <span class="saved-msg" id="saved-${c.id}">✓ Salvo!</span>
+          <button class="btn-del" onclick="openConfirm(${c.id})">🗑 Remover</button>
+        </div>
+        ${c.updated?`<div class="update-ts">Última atualização: ${fmtDate(c.updated)}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('modal-bg').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('confirm-bg').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
+
+/* ========== INIT ========== */
+function init(){
+  const hasCfg=localStorage.getItem(LS_CONFIG);
+  const isOffline=localStorage.getItem(LS_OFFLINE);
+  if(hasCfg){
+    initFirebase();
+  } else if(isOffline){
+    loadLocal();
+    render();
+  } else {
+    showSetup();
+  }
+}
+
+window.addEventListener('fb-ready',init);
+// Fallback if fb-ready already fired
+if(window._fb)init();
+</script>
+</body>
+</html>
