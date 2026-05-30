@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IRPF 2026 — Controle de Declarações</title>
+<title>DIRPF 2026 — Controle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -20,72 +20,97 @@
   --purple:#5C2E8A;--purple-bg:#F0E8FA;--purple-border:#C9A8EE;
   --amber:#8A5C00;--amber-bg:#FFF5DC;--amber-border:#F5D98A;
   --teal:#0D6B5E;--teal-bg:#E0F5F2;--teal-border:#8ADDD3;
+  --orange:#C2410C;--orange-bg:#FFF4ED;--orange-border:#FDBA8C;
   --r:8px;--r-lg:14px;--r-xl:18px;
   --shadow:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
   --shadow-md:0 4px 16px rgba(0,0,0,0.08);
 }
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
 
+/* HERO */
 .hero{background:linear-gradient(135deg,var(--slate) 0%,var(--slate2) 50%,var(--slate3) 100%);position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;top:-120px;right:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(184,115,51,0.08) 0%,transparent 70%);pointer-events:none;}
-.hero-inner{max-width:1000px;margin:0 auto;padding:22px 28px 0;}
-.hero-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap;}
-.brand{display:flex;align-items:center;gap:14px;}
-.brand-icon{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--copper),var(--copper-dark));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 2px 8px rgba(184,115,51,0.3);}
-.brand-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.3px;}
-.brand-sub{font-size:11px;color:var(--slate-sub);margin-top:2px;font-weight:300;letter-spacing:0.3px;}
+.hero-inner{max-width:1000px;margin:0 auto;padding:20px 24px 0;}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--copper),var(--copper-dark));display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 2px 8px rgba(184,115,51,0.3);}
+.brand-title{font-size:17px;font-weight:700;color:#fff;letter-spacing:-0.3px;}
+.brand-sub{font-size:10px;color:var(--slate-sub);margin-top:2px;font-weight:400;letter-spacing:0.5px;text-transform:uppercase;}
 .hero-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .sync-dot{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--slate-sub);padding:4px 10px;background:rgba(255,255,255,0.06);border-radius:20px;border:1px solid rgba(255,255,255,0.1);}
 .sync-dot.online::before{content:'';width:6px;height:6px;border-radius:50%;background:#5EDEA0;display:inline-block;}
 .sync-dot.offline::before{content:'';width:6px;height:6px;border-radius:50%;background:#FF8F8F;display:inline-block;}
 .sync-dot.syncing::before{content:'';width:6px;height:6px;border-radius:50%;background:#FFD080;display:inline-block;animation:pulse 1s infinite;}
 @keyframes pulse{50%{opacity:0.4;}}
-.new-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:8px 16px;border-radius:var(--r);border:1px solid rgba(184,115,51,0.4);background:rgba(184,115,51,0.15);color:var(--copper-light);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.15s;white-space:nowrap;}
+.new-btn{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:8px 14px;border-radius:var(--r);border:1px solid rgba(184,115,51,0.4);background:rgba(184,115,51,0.15);color:var(--copper-light);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.15s;white-space:nowrap;}
 .new-btn:hover{background:rgba(184,115,51,0.25);}
-.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));border-top:1px solid rgba(255,255,255,0.06);margin:0 -28px;padding:0 28px;}
-.stat-item{padding:14px 12px;border-right:1px solid rgba(255,255,255,0.06);}
-.stat-item:last-child{border-right:none;}
-.stat-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.5px;line-height:1;white-space:nowrap;}
-.stat-num.mono{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--slate-text);}
-.stat-num.s-green{color:#5EDEA0;}.stat-num.s-red{color:#FF8F8F;}.stat-num.s-amber{color:var(--copper-light);}
-.stat-lbl{font-size:9px;color:var(--slate-sub);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;}
-.prazo-banner{background:linear-gradient(90deg,rgba(184,115,51,0.1),rgba(201,168,76,0.08));border-bottom:1px solid rgba(184,115,51,0.15);padding:7px 28px;font-size:12px;color:var(--copper);display:flex;align-items:center;gap:8px;max-width:1000px;margin:0 auto;}
-.prazo-banner b{font-weight:600;}
 
-.content{max-width:1000px;margin:0 auto;padding:20px 16px 64px;}
-.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
-.search-wrap{position:relative;flex:1;min-width:160px;max-width:240px;}
+/* STATS */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,0.06);margin:0 -24px;padding:0;}
+.stat-item{padding:12px 14px;border-right:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);min-width:0;}
+.stat-item:nth-child(4n){border-right:none;}
+.stat-item:nth-child(n+5){border-bottom:none;}
+.stat-num{font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat-num.mono{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--slate-text);}
+.stat-num.s-green{color:#5EDEA0;}.stat-num.s-red{color:#FF8F8F;}.stat-num.s-amber{color:var(--copper-light);}.stat-num.s-orange{color:#FDBA8C;}
+.stat-lbl{font-size:9px;color:var(--slate-sub);text-transform:uppercase;letter-spacing:0.6px;margin-top:4px;font-weight:500;}
+
+/* ALERT BANNER */
+.alert-banner{padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:8px;max-width:1000px;margin:0 auto;}
+.alert-banner.billing{background:linear-gradient(90deg,rgba(184,115,51,0.12),rgba(184,115,51,0.04));border-bottom:1px solid rgba(184,115,51,0.15);color:var(--copper);}
+.alert-banner b{font-weight:600;}
+
+/* CONTENT */
+.content{max-width:1000px;margin:0 auto;padding:18px 16px 64px;}
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:140px;max-width:240px;}
 .search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink4);pointer-events:none;}
-.search-input{font-family:'DM Sans',sans-serif;font-size:12px;width:100%;padding:7px 10px 7px 30px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);color:var(--ink);}
+.search-input{font-family:'Inter',sans-serif;font-size:12px;width:100%;padding:7px 10px 7px 30px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);color:var(--ink);}
 .search-input:focus{outline:none;border-color:var(--copper);box-shadow:0 0 0 3px rgba(184,115,51,0.1);}
 .search-input::placeholder{color:var(--ink4);}
-.sort-select{font-family:'DM Sans',sans-serif;font-size:11px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);color:var(--ink2);cursor:pointer;}
-.f-add{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px 16px;border-radius:var(--r);border:none;background:var(--copper);color:#fff;cursor:pointer;white-space:nowrap;}
+.sort-select{font-family:'Inter',sans-serif;font-size:11px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface);color:var(--ink2);cursor:pointer;}
+.f-add{margin-left:auto;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:var(--r);border:none;background:var(--copper);color:#fff;cursor:pointer;white-space:nowrap;}
 .f-add:hover{opacity:0.85;}
-.filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px;}
-.f-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+
+.filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.f-btn{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .f-btn:hover{border-color:var(--copper);color:var(--copper);}
 .f-btn.active{background:var(--slate);color:#fff;border-color:var(--slate);}
 
-.list{display:flex;flex-direction:column;gap:6px;}
+/* SECTION DIVIDERS */
+.section-header{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;padding:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.section-header::after{content:'';flex:1;height:1px;background:var(--border2);}
+.section-count{font-weight:400;color:var(--ink4);font-size:10px;}
+
+/* CARDS */
+.list{display:flex;flex-direction:column;gap:5px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:all 0.15s;position:relative;}
 .card:hover{border-color:var(--border2);box-shadow:var(--shadow);}
 .card.pago-sim{border-left:3px solid var(--green);}
-.pri-ribbon{position:absolute;top:0;left:0;width:3px;height:100%;}
+.card.transmitida-card{opacity:0.7;}.card.transmitida-card:hover{opacity:1;}
 
-.card-head{display:flex;align-items:center;gap:12px;padding:12px 16px 12px 20px;cursor:pointer;user-select:none;}
-.avatar{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;font-family:'DM Sans',sans-serif;letter-spacing:0.5px;}
+.card-head{display:flex;align-items:center;gap:10px;padding:11px 14px 11px 16px;cursor:pointer;user-select:none;}
+.avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;letter-spacing:0.5px;}
 .card-info{flex:1;min-width:0;}
-.card-name{font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-name{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;}
 .card-meta{display:flex;align-items:center;gap:5px;margin-top:2px;flex-wrap:wrap;}
-.tag{font-size:10px;color:var(--ink3);}
+.tag{font-size:10px;color:var(--ink3);font-weight:400;}
 .tag-sep{font-size:10px;color:var(--ink4);}
 .val-tag{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;background:var(--copper-bg);color:var(--copper-dark);padding:1px 7px;border-radius:20px;border:1px solid rgba(184,115,51,0.2);}
 .pago-tag{font-size:9px;font-weight:600;background:var(--green-bg);color:var(--green);padding:1px 7px;border-radius:20px;}
-.npago-tag{font-size:9px;font-weight:600;background:var(--red-bg);color:var(--red);padding:1px 7px;border-radius:20px;}
+.npago-tag{font-size:9px;font-weight:600;background:var(--red-bg);color:var(--red);padding:1px 7px;border-radius:20px;animation:blink 2s infinite;}
+@keyframes blink{50%{opacity:0.6;}}
 .pri-num{font-size:9px;font-weight:700;background:var(--slate);color:#fff;padding:1px 7px;border-radius:20px;font-family:'DM Mono',monospace;}
 
-.card-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+/* OBS TOOLTIP */
+.obs-indicator{position:relative;display:inline-flex;cursor:pointer;}
+.obs-dot{font-size:9px;color:var(--ink4);background:var(--surface2);border:1px solid var(--border2);padding:1px 7px;border-radius:20px;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;}
+.obs-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--slate);color:var(--slate-text);font-size:11px;padding:10px 14px;border-radius:var(--r);width:280px;line-height:1.5;z-index:50;box-shadow:var(--shadow-md);pointer-events:none;}
+.obs-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--slate);}
+.obs-indicator:hover .obs-tooltip{display:block;}
+@media(max-width:700px){.obs-tooltip{left:auto;right:0;transform:none;width:220px;}.obs-tooltip::after{left:auto;right:16px;}}
+
+.card-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
 .status-pill{font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;white-space:nowrap;border:1px solid transparent;}
 .chevron{font-size:10px;color:var(--ink4);transition:transform 0.2s;font-style:normal;}
 .card.open .chevron{transform:rotate(180deg);}
@@ -93,11 +118,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 .prog-fill{height:2px;background:var(--copper);transition:width 0.4s;}
 .prog-fill.full{background:var(--green);}
 
-.card-body{display:none;padding:16px 20px;border-top:1px solid var(--border);background:var(--surface2);}
+.card-body{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--surface2);}
 .card.open .card-body{display:block;}
-.sec-lbl{font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;font-weight:500;margin-bottom:8px;}
+.sec-lbl{font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:8px;}
 .steps-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;}
-.chip{display:flex;align-items:center;gap:4px;font-size:11px;font-family:'DM Sans',sans-serif;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all 0.15s;user-select:none;}
+.chip{display:flex;align-items:center;gap:4px;font-size:11px;font-family:'Inter',sans-serif;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--surface);color:var(--ink3);cursor:pointer;transition:all 0.15s;user-select:none;font-weight:400;}
 .chip:hover{border-color:var(--copper);}
 .chip.done{background:var(--green-bg);border-color:var(--green-border);color:var(--green);font-weight:500;}
 .chip-ico{font-style:normal;font-size:10px;}
@@ -107,14 +132,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 .fields-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .fields-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
 .fld{display:flex;flex-direction:column;gap:3px;}
-.fld-lbl{font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.6px;font-weight:500;}
-.fld-input,.fld-select,.fld-textarea{font-size:12px;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:7px 10px;width:100%;transition:border-color 0.15s;}
+.fld-lbl{font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.6px;font-weight:600;}
+.fld-input,.fld-select,.fld-textarea{font-size:12px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:7px 10px;width:100%;transition:border-color 0.15s;}
 .fld-input:focus,.fld-select:focus,.fld-textarea:focus{outline:none;border-color:var(--copper);box-shadow:0 0 0 3px rgba(184,115,51,0.08);}
 .fld-input.mono{font-family:'DM Mono',monospace;font-size:12px;}
 .fld-textarea{resize:vertical;min-height:56px;line-height:1.5;}
 
 .cred-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:10px 12px;margin-bottom:10px;}
-.cred-title{font-size:9px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.cred-title{font-size:9px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .cred-title::before{content:'🔐';font-size:11px;}
 .no-cred{font-size:10px;color:var(--red);font-weight:500;margin-top:6px;}
 
@@ -128,44 +153,50 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 .pago-toggle.sim .pago-toggle-lbl{color:var(--green);}
 
 .actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;}
-.btn-save{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px 16px;border-radius:var(--r);border:none;background:var(--copper);color:#fff;cursor:pointer;}
+.btn-save{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:var(--r);border:none;background:var(--copper);color:#fff;cursor:pointer;}
 .btn-save:hover{opacity:0.85;}
 .saved-msg{font-size:11px;color:var(--green);font-weight:500;display:none;}
-.btn-edit{font-family:'DM Sans',sans-serif;font-size:11px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
+.btn-edit{font-family:'Inter',sans-serif;font-size:11px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
 .btn-edit:hover{background:var(--surface);}
-.btn-del{margin-left:auto;font-family:'DM Sans',sans-serif;font-size:11px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--red-border);background:transparent;color:var(--red);cursor:pointer;}
+.btn-del{margin-left:auto;font-family:'Inter',sans-serif;font-size:11px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--red-border);background:transparent;color:var(--red);cursor:pointer;}
 .btn-del:hover{background:var(--red-bg);}
 .update-ts{font-size:10px;color:var(--ink4);margin-top:8px;}
 .empty{text-align:center;padding:3rem;color:var(--ink3);font-size:13px;}
 
+/* MODALS */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(20,18,30,0.5);z-index:300;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
 .modal-bg.open{display:flex;}
-.modal{background:var(--surface);border-radius:var(--r-xl);border:1px solid var(--border2);padding:24px;width:min(540px,100%);display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow-md);max-height:92vh;overflow-y:auto;}
-.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--slate);}
+.modal{background:var(--surface);border-radius:var(--r-xl);border:1px solid var(--border2);padding:22px;width:min(540px,100%);display:flex;flex-direction:column;gap:11px;box-shadow:var(--shadow-md);max-height:92vh;overflow-y:auto;}
+.modal-title{font-size:17px;font-weight:700;color:var(--slate);letter-spacing:-0.2px;}
 .modal-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.modal-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 .modal-row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
-.btn-cancel{font-family:'DM Sans',sans-serif;font-size:12px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
-.btn-ok{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:8px 20px;border-radius:var(--r);border:none;background:var(--copper);color:#fff;cursor:pointer;}
+.btn-cancel{font-family:'Inter',sans-serif;font-size:12px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
+.btn-ok{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:8px 20px;border-radius:var(--r);border:none;background:var(--copper);color:#fff;cursor:pointer;}
 .btn-ok:hover{opacity:0.85;}
-
 .confirm-bg{display:none;position:fixed;inset:0;background:rgba(20,18,30,0.5);z-index:400;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
 .confirm-bg.open{display:flex;}
-.confirm-box{background:var(--surface);border-radius:var(--r-xl);padding:24px;width:min(360px,100%);box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:12px;}
-.confirm-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--slate);}
+.confirm-box{background:var(--surface);border-radius:var(--r-xl);padding:22px;width:min(360px,100%);box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:12px;}
+.confirm-title{font-size:16px;font-weight:700;color:var(--slate);}
 .confirm-msg{font-size:12px;color:var(--ink2);line-height:1.5;}
 .confirm-actions{display:flex;gap:8px;justify-content:flex-end;}
-.btn-cancel-sm{font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 14px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
-.btn-danger{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:var(--r);border:none;background:var(--red);color:#fff;cursor:pointer;}
+.btn-cancel-sm{font-family:'Inter',sans-serif;font-size:12px;padding:7px 14px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--ink2);cursor:pointer;}
+.btn-danger{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:var(--r);border:none;background:var(--red);color:#fff;cursor:pointer;}
 
 @media(max-width:700px){
-  .hero-inner{padding:16px 14px 0;}.stats-strip{margin:0 -14px;padding:0 14px;grid-template-columns:repeat(4,1fr);}
-  .stat-item:nth-child(n+5){display:none;}.prazo-banner{padding:7px 14px;}
-  .content{padding:14px 10px 60px;}.fields-row,.fields-4,.modal-row3,.modal-row4{grid-template-columns:1fr 1fr;}
+  .hero-inner{padding:16px 14px 0;}.stats-strip{margin:0 -14px;grid-template-columns:repeat(4,1fr);}
+  .stat-item{padding:10px 10px;}.stat-num{font-size:17px;}
+  .alert-banner{padding:7px 14px;}.content{padding:14px 10px 60px;}
+  .fields-row,.fields-4,.modal-row4{grid-template-columns:1fr 1fr;}
   .fields-2,.modal-row{grid-template-columns:1fr;}
+  .card-head{padding:10px 12px 10px 14px;}.card-body{padding:12px 14px;}.brand-title{font-size:15px;}
 }
-@media(max-width:420px){.stats-strip{grid-template-columns:repeat(2,1fr);}.stat-item:nth-child(n+3){display:none;}}
+@media(max-width:420px){
+  .stats-strip{grid-template-columns:repeat(2,1fr);}
+  .stat-item{padding:10px 12px;}.stat-item:nth-child(2n){border-right:none;}
+  .stat-num{font-size:16px;}.stat-num.mono{font-size:11px;}
+  .brand-title{font-size:14px;}.brand-sub{font-size:9px;}.card-name{font-size:12px;}
+}
 </style>
 </head>
 <body>
@@ -176,7 +207,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
       <div class="brand-icon">📋</div>
       <div>
         <div class="brand-title">Controle DIRPF 2026 — Lucas</div>
-        <div class="brand-sub">COMPETÊNCIA 2025 · PRAZO: 30/05/2026</div>
+        <div class="brand-sub">Competência 2025</div>
       </div>
     </div>
     <div class="hero-actions">
@@ -186,18 +217,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
   </div>
   <div class="stats-strip" id="stats-strip"></div>
 </div></div>
-<div class="prazo-banner">⏰ <b>Prazo RF:</b> <span id="prazo-txt"></span></div>
+<div class="alert-banner billing" id="alert-banner"></div>
 
 <div class="content">
   <div class="toolbar">
     <div class="search-wrap"><span class="search-ico">🔍</span><input class="search-input" type="text" id="search-input" placeholder="Buscar cliente..." oninput="render()"></div>
     <select class="sort-select" id="sort-select" onchange="render()">
+      <option value="smart">Ordenar: Inteligente</option>
       <option value="prioridade">Ordenar: Prioridade</option>
       <option value="nome">Ordenar: Nome</option>
       <option value="status">Ordenar: Status</option>
-      <option value="pct">Ordenar: Progresso</option>
       <option value="valor">Ordenar: Valor</option>
-      <option value="recente">Ordenar: Atualizado</option>
     </select>
     <button class="f-add" onclick="openModal()">+ Novo cliente</button>
   </div>
@@ -206,9 +236,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
     <button class="f-btn" onclick="setFilter('a_preencher',this)">A preencher</button>
     <button class="f-btn" onclick="setFilter('em_preenchimento',this)">Em preenchimento</button>
     <button class="f-btn" onclick="setFilter('preenchida',this)">Preenchida</button>
+    <button class="f-btn" onclick="setFilter('a_retificar',this)">⚠️ A retificar</button>
     <button class="f-btn" onclick="setFilter('transmitida',this)">Transmitida</button>
+    <button class="f-btn" onclick="setFilter('nao_pago',this)">💰 Não pagos</button>
   </div>
-  <div class="list" id="list"></div>
+  <div id="list"></div>
 </div>
 
 <div class="confirm-bg" id="confirm-bg"><div class="confirm-box">
@@ -224,7 +256,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
     <div class="fld"><div class="fld-lbl">Tipo</div><select class="fld-select" id="m-tipo"><option value="PF">PF</option><option value="Casal">Casal</option><option value="PJ">PJ</option><option value="MEI">MEI</option></select></div>
     <div class="fld"><div class="fld-lbl">Honorários (R$)</div><input class="fld-input mono" type="text" id="m-valor" placeholder="0,00" oninput="maskMoney(this)" /></div>
     <div class="fld"><div class="fld-lbl">Prioridade (nº)</div><input class="fld-input mono" type="number" id="m-pri" value="99" min="1" max="999" /></div>
-    <div class="fld"><div class="fld-lbl">Status</div><select class="fld-select" id="m-status"><option value="a_preencher">A preencher</option><option value="em_preenchimento">Em preenchimento</option><option value="preenchida">Preenchida</option><option value="transmitida">Transmitida</option></select></div>
+    <div class="fld"><div class="fld-lbl">Status</div><select class="fld-select" id="m-status"><option value="a_preencher">A preencher</option><option value="em_preenchimento">Em preenchimento</option><option value="preenchida">Preenchida</option><option value="a_retificar">A retificar</option><option value="transmitida">Transmitida</option></select></div>
   </div>
   <div class="modal-row">
     <div class="fld"><div class="fld-lbl">CPF</div><input class="fld-input mono" type="text" id="m-cpf" placeholder="000.000.000-00" oninput="maskCPF(this)" maxlength="14" /></div>
@@ -232,7 +264,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
   </div>
   <div class="modal-row">
     <div class="fld"><div class="fld-lbl">Prazo</div><input class="fld-input" type="date" id="m-prazo" /></div>
-    <div class="fld"><div class="fld-lbl">Empresa (opcional)</div><input class="fld-input" type="text" id="m-empresa" placeholder="Nome da empresa" /></div>
+    <div class="fld"><div class="fld-lbl">Empresa (opcional)</div><input class="fld-input" type="text" id="m-empresa" /></div>
   </div>
   <div class="fld"><div class="fld-lbl">Observações</div><textarea class="fld-textarea" id="m-obs" rows="2"></textarea></div>
   <div class="modal-footer">
@@ -244,44 +276,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import{getDatabase,ref,set,onValue}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
 const app=initializeApp({apiKey:"AIzaSyD3V-kt30G2JIfAI0nJTFUnSPR9cd7CqgE",authDomain:"automacoes-751ba.firebaseapp.com",databaseURL:"https://automacoes-751ba-default-rtdb.firebaseio.com",projectId:"automacoes-751ba",storageBucket:"automacoes-751ba.firebasestorage.app",messagingSenderId:"367127077365",appId:"1:367127077365:web:562d572688661c0a4540bc"});
 const db=getDatabase(app),dbRef=ref(db,'irpf2026/v2');
 
-const STEPS=[
-  {id:'docs',label:'Docs recebidos',ico:'📩'},
-  {id:'acesso',label:'Acesso Gov.br',ico:'🔐'},
-  {id:'importacao',label:'Importação',ico:'📥'},
-  {id:'analise',label:'Análise',ico:'🔍'},
-  {id:'preenchimento',label:'Preenchimento',ico:'✏️'},
-  {id:'revisao',label:'Revisão',ico:'👁️'},
-  {id:'transmissao',label:'Transmissão',ico:'📤'},
-  {id:'cobranca',label:'Cobrança',ico:'💰'},
-];
+const STEPS=[{id:'docs',label:'Docs recebidos',ico:'📩'},{id:'acesso',label:'Acesso Gov.br',ico:'🔐'},{id:'importacao',label:'Importação',ico:'📥'},{id:'analise',label:'Análise',ico:'🔍'},{id:'preenchimento',label:'Preenchimento',ico:'✏️'},{id:'revisao',label:'Revisão',ico:'👁️'},{id:'transmissao',label:'Transmissão',ico:'📤'},{id:'cobranca',label:'Cobrança',ico:'💰'}];
 const SM={
   a_preencher:{label:'📋 A preencher',bg:'var(--amber-bg)',color:'var(--amber)',border:'var(--amber-border)',order:1},
   em_preenchimento:{label:'✏️ Em preenchimento',bg:'var(--blue-bg)',color:'var(--blue)',border:'var(--blue-border)',order:2},
   preenchida:{label:'✅ Preenchida',bg:'var(--purple-bg)',color:'var(--purple)',border:'var(--purple-border)',order:3},
-  transmitida:{label:'📤 Transmitida',bg:'var(--green-bg)',color:'var(--green)',border:'var(--green-border)',order:4},
+  a_retificar:{label:'⚠️ A retificar',bg:'var(--orange-bg)',color:'var(--orange)',border:'var(--orange-border)',order:4},
+  transmitida:{label:'📤 Transmitida',bg:'var(--green-bg)',color:'var(--green)',border:'var(--green-border)',order:10},
 };
 const AV=[{bg:'#E8E0D4',c:'#6B4C2A'},{bg:'#D6E4E0',c:'#2A5A4E'},{bg:'#E0D8EC',c:'#4A2E6B'},{bg:'#E6E0D2',c:'#6B5A2A'},{bg:'#DFD8D2',c:'#5A3E2A'},{bg:'#D4DFE8',c:'#2A3E5A'},{bg:'#E8DCD4',c:'#6B3A2A'},{bg:'#D8E0D4',c:'#3A5A2A'}];
-
-const INIT=[
-  {id:1,nome:'Luan',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Aguardando documentos.',steps:{docs:false,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:2,nome:'Karol',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Aguardando documentos.',steps:{docs:false,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:3,nome:'Laís dos Santos',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Analisar os documentos recebidos.',steps:{docs:true,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:4,nome:'Rayner',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Acesso Gov.br com verificação em duas etapas — resolver com o cliente.',steps:{docs:true,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:5,nome:'Larissa Cuzzuol',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Acesso Gov.br com verificação em duas etapas. Transmitir (conferir) Declaração Anual do MEI também.',steps:{docs:true,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:6,nome:'Lívia Rocha Helmer',tipo:'PF',status:'transmitida',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Transmitida.',steps:{docs:true,acesso:true,importacao:true,analise:true,preenchimento:true,revisao:true,transmissao:true,cobranca:false},updated:Date.now()},
-  {id:7,nome:'Leonardo Panaro',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Enviar/retificar os últimos 5 anos. Apenas imóveis como Bens e Direitos. Em 2025 houve doação de imóvel para um dos filhos.',steps:{docs:false,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:8,nome:'Guilherme Depes Lorga Rage',tipo:'PF',status:'preenchida',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Preenchida. Aguardando informe da XP para finalizar.',steps:{docs:true,acesso:true,importacao:true,analise:true,preenchimento:true,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:9,nome:'Amanda Rosa Lamonica',tipo:'PF',status:'preenchida',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Preenchida. Falta confirmar faturamento do MEI para lançar distribuição de lucros. Transmitir Declaração Anual do MEI também.',steps:{docs:true,acesso:true,importacao:true,analise:true,preenchimento:true,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:10,nome:'Camila Pinto de Freitas',tipo:'PF',status:'preenchida',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Preenchida. Aguardando autorização para envio.',steps:{docs:true,acesso:true,importacao:true,analise:true,preenchimento:true,revisao:true,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:11,nome:'Marcelo Vojnovic',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Aguardando documentos corretos.',steps:{docs:false,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:12,nome:'Amanda Maria Villela de Oliveira',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Cliente não passou acesso Gov.br — preencher com base nos documentos e print da declaração pré-preenchida. ANALISAR: melhor declarar o filho na dela ou do marido (Adriano)?',steps:{docs:true,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:13,nome:'Adriano Benevides de Oliveira',tipo:'PF',status:'a_preencher',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Cliente não passou acesso Gov.br — preencher com base nos documentos e print da declaração pré-preenchida. ANALISAR: melhor declarar o filho na dele ou da esposa (Amanda)?',steps:{docs:true,acesso:false,importacao:false,analise:false,preenchimento:false,revisao:false,transmissao:false,cobranca:false},updated:Date.now()},
-  {id:14,nome:'Renan Cosme Savacini',tipo:'PF',status:'preenchida',valor:'175,00',pago:false,prioridade:99,prazo:'2026-05-30',cpf:'',senha:'',empresa:'',obs:'Preenchida. Aguardando liberação para transmissão.',steps:{docs:true,acesso:true,importacao:true,analise:true,preenchimento:true,revisao:true,transmissao:false,cobranca:false},updated:Date.now()},
-];
 
 let clients=[],nextId=100,filterStatus='todos',editingId=null,firstLoad=true;
 
@@ -296,8 +302,9 @@ function fmtDate(ts){if(!ts)return'';return new Date(ts).toLocaleDateString('pt-
 function ini(n){const w=n.trim().split(/\s+/);if(w.length===1)return w[0].slice(0,2).toUpperCase();return(w[0][0]+w[w.length-1][0]).toUpperCase();}
 function avC(id){return AV[id%AV.length];}
 function pct(c){return Math.round(Object.values(c.steps||{}).filter(Boolean).length/STEPS.length*100);}
-function prazo(){const p=new Date('2026-05-30'),h=new Date();h.setHours(0,0,0,0);p.setHours(0,0,0,0);const d=Math.round((p-h)/864e5);if(d<0)return'Prazo encerrado.';if(d===0)return'HOJE é o último dia!';if(d===1)return'Falta 1 dia!';return'Faltam '+d+' dias';}
-function calcS(){let t=clients.length,byS={},tv=0,rv=0,pn=0;clients.forEach(c=>{byS[c.status]=(byS[c.status]||0)+1;const v=parseBRL(c.valor);tv+=v;if(c.pago)rv+=v;else pn+=v;});return{t,byS,tv,rv,pn};}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function calcS(){let t=clients.length,byS={},tv=0,rv=0,pn=0,unpaid=0;clients.forEach(c=>{byS[c.status]=(byS[c.status]||0)+1;const v=parseBRL(c.valor);tv+=v;if(c.pago)rv+=v;else{pn+=v;unpaid++;}});return{t,byS,tv,rv,pn,unpaid};}
 
 window.maskMoney=maskMoney;window.maskCPF=maskCPF;
 window.setFilter=function(f,btn){filterStatus=f;document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();};
@@ -316,8 +323,7 @@ window.saveClient=function(cid){
   c.updated=Date.now();push();
 };
 window.editClient=function(cid){
-  const c=clients.find(x=>x.id===cid);if(!c)return;
-  editingId=cid;
+  const c=clients.find(x=>x.id===cid);if(!c)return;editingId=cid;
   document.getElementById('modal-title').textContent='Editar — '+c.nome;
   document.getElementById('modal-ok-btn').textContent='Salvar alterações';
   document.getElementById('m-nome').value=c.nome;
@@ -337,88 +343,127 @@ window.closeConfirm=function(){document.getElementById('confirm-bg').classList.r
 window.openModal=function(){editingId=null;document.getElementById('modal-title').textContent='Novo cliente';document.getElementById('modal-ok-btn').textContent='Adicionar';['m-nome','m-valor','m-obs','m-prazo','m-cpf','m-senha','m-empresa'].forEach(id=>{document.getElementById(id).value='';});document.getElementById('m-pri').value='99';document.getElementById('modal-bg').classList.add('open');setTimeout(()=>document.getElementById('m-nome').focus(),50);};
 window.closeModal=function(){document.getElementById('modal-bg').classList.remove('open');editingId=null;};
 window.submitModal=function(){
-  const nome=document.getElementById('m-nome').value.trim();
-  if(!nome){alert('Informe o nome.');return;}
-  const data={nome,tipo:document.getElementById('m-tipo').value,status:document.getElementById('m-status').value,valor:document.getElementById('m-valor').value,prioridade:parseInt(document.getElementById('m-pri').value)||99,prazo:document.getElementById('m-prazo').value||'2026-05-30',cpf:document.getElementById('m-cpf').value,senha:document.getElementById('m-senha').value,empresa:document.getElementById('m-empresa').value,obs:document.getElementById('m-obs').value.trim(),updated:Date.now()};
+  const nome=document.getElementById('m-nome').value.trim();if(!nome){alert('Informe o nome.');return;}
+  const data={nome,tipo:document.getElementById('m-tipo').value,status:document.getElementById('m-status').value,valor:document.getElementById('m-valor').value,prioridade:parseInt(document.getElementById('m-pri').value)||99,prazo:document.getElementById('m-prazo').value||'',cpf:document.getElementById('m-cpf').value,senha:document.getElementById('m-senha').value,empresa:document.getElementById('m-empresa').value,obs:document.getElementById('m-obs').value.trim(),updated:Date.now()};
   if(editingId!==null){const c=clients.find(x=>x.id===editingId);if(c)Object.assign(c,data);}
   else{data.id=nextId++;data.pago=false;const st={};STEPS.forEach(s=>st[s.id]=false);data.steps=st;clients.push(data);}
   push();closeModal();
 };
 
+function smartSort(a,b){
+  const aT=a.status==='transmitida'?1:0, bT=b.status==='transmitida'?1:0;
+  if(aT!==bT)return aT-bT;
+  const aR=a.status==='a_retificar'?0:1, bR=b.status==='a_retificar'?0:1;
+  if(aR!==bR)return aR-bR;
+  const aP=!a.pago?0:1, bP=!b.pago?0:1;
+  if(aP!==bP)return aP-bP;
+  return(a.prioridade||99)-(b.prioridade||99)||a.nome.localeCompare(b.nome,'pt-BR');
+}
+
 function getSorted(list){
-  const s=document.getElementById('sort-select')?.value||'prioridade';
+  const s=document.getElementById('sort-select')?.value||'smart';
+  if(s==='smart')return[...list].sort(smartSort);
   return[...list].sort((a,b)=>{
     if(s==='prioridade'){const d=(a.prioridade||99)-(b.prioridade||99);return d!==0?d:a.nome.localeCompare(b.nome,'pt-BR');}
     if(s==='nome')return a.nome.localeCompare(b.nome,'pt-BR');
     if(s==='status')return(SM[a.status]?.order||9)-(SM[b.status]?.order||9);
-    if(s==='pct')return pct(b)-pct(a);
     if(s==='valor')return parseBRL(b.valor)-parseBRL(a.valor);
-    if(s==='recente')return(b.updated||0)-(a.updated||0);
     return 0;
   });
 }
 
+function renderCard(c){
+  const sm=SM[c.status]||SM['a_preencher'],av=avC(c.id),p=pct(c),pr=c.prioridade||99;
+  const opts=Object.entries(SM).map(([k,v])=>`<option value="${k}" ${c.status===k?'selected':''}>${v.label}</option>`).join('');
+  const chips=STEPS.map(s=>`<span class="chip ${(c.steps&&c.steps[s.id])?'done':''}" onclick="toggleStep(${c.id},'${s.id}')"><span class="chip-ico">${(c.steps&&c.steps[s.id])?'✓':s.ico}</span>${s.label}</span>`).join('');
+  const vt=c.valor?`<span class="val-tag">R$&nbsp;${c.valor}</span>`:'';
+  const pt2=c.valor?(c.pago?'<span class="pago-tag">✓ Pago</span>':'<span class="npago-tag">Não pago</span>'):'';
+  const hasCred=c.cpf||c.senha;
+  const isTransmitida=c.status==='transmitida';
+  const obsPreview=c.obs?(c.obs.length>25?c.obs.slice(0,25)+'…':c.obs):'';
+  const obsTooltip=c.obs?`<span class="obs-indicator"><span class="obs-dot">📝 ${esc(obsPreview)}</span><span class="obs-tooltip">${esc(c.obs)}</span></span>`:'';
+
+  return`<div class="card ${c.pago&&c.valor?'pago-sim':''} ${isTransmitida?'transmitida-card':''}" id="card-${c.id}">
+    <div class="card-head" onclick="toggleCard(${c.id})">
+      <div class="avatar" style="background:${av.bg};color:${av.c}">${ini(c.nome)}</div>
+      <div class="card-info"><div class="card-name">${c.nome}</div>
+        <div class="card-meta"><span class="pri-num">#${pr}</span><span class="tag">${c.tipo}</span><span class="tag-sep">·</span><span class="tag">${p}%</span>${vt}${pt2}${obsTooltip}</div>
+      </div>
+      <div class="card-right"><span class="status-pill" style="background:${sm.bg};color:${sm.color};border-color:${sm.border}">${sm.label}</span><span class="chevron">▾</span></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill ${p===100?'full':''}" style="width:${p}%"></div></div>
+    <div class="card-body">
+      <div class="sec-lbl">Etapas do fluxo</div><div class="steps-row">${chips}</div>
+      <div class="divider"></div>
+      <div class="cred-box"><div class="cred-title">Acesso Gov.br</div>
+        <div class="fields-2" style="margin:0"><div class="fld"><div class="fld-lbl">CPF</div><input class="fld-input mono" type="text" id="cpf-${c.id}" value="${c.cpf||''}" placeholder="000.000.000-00" oninput="maskCPF(this)" maxlength="14"/></div>
+        <div class="fld"><div class="fld-lbl">Senha</div><input class="fld-input" type="password" id="senha-${c.id}" value="${c.senha||''}" placeholder="Não informada"/></div></div>
+        ${!hasCred?'<div class="no-cred">⚠️ Credenciais não informadas</div>':''}
+      </div>
+      <div class="fields-4">
+        <div class="fld"><div class="fld-lbl">Status</div><select class="fld-select" id="st-${c.id}">${opts}</select></div>
+        <div class="fld"><div class="fld-lbl">Honorários</div><input class="fld-input mono" type="text" id="val-${c.id}" value="${c.valor||''}" placeholder="0,00" oninput="maskMoney(this)"/></div>
+        <div class="fld"><div class="fld-lbl">Prioridade</div><input class="fld-input mono" type="number" id="pri-${c.id}" value="${pr}" min="1" max="999"/></div>
+        <div class="fld"><div class="fld-lbl">Prazo</div><input class="fld-input" type="date" id="pz-${c.id}" value="${c.prazo||''}"/></div>
+      </div>
+      <div class="fld" style="margin-bottom:8px"><div class="fld-lbl">Pagamento</div><div class="pago-toggle ${c.pago?'sim':''}" onclick="togglePago(${c.id})"><div class="pago-toggle-dot"></div><span class="pago-toggle-lbl">${c.pago?'✓ Recebido':'Pendente'}</span></div></div>
+      <div class="fld" style="margin-bottom:8px"><div class="fld-lbl">Observações</div><textarea class="fld-textarea" id="obs-${c.id}">${c.obs||''}</textarea></div>
+      <div class="actions">
+        <button class="btn-save" onclick="saveClient(${c.id})">💾 Salvar</button>
+        <span class="saved-msg" id="saved-${c.id}">✓ Salvo!</span>
+        <button class="btn-edit" onclick="editClient(${c.id})">✏️ Editar</button>
+        <button class="btn-del" onclick="openConfirm(${c.id})">🗑</button>
+      </div>
+      ${c.updated?`<div class="update-ts">Atualizado: ${fmtDate(c.updated)}</div>`:''}
+    </div>
+  </div>`;
+}
+
 function render(){
-  document.getElementById('prazo-txt').textContent=prazo();
   const st=calcS();
+  const unpaidCount=st.unpaid;
+
+  document.getElementById('alert-banner').innerHTML=unpaidCount>0
+    ?`💰 <b>Cobrança:</b> ${unpaidCount} cliente${unpaidCount>1?'s':''} com pagamento pendente — R$ ${fmtBRL(st.pn)} a receber`
+    :'✅ <b>Todos os pagamentos recebidos!</b>';
+
   document.getElementById('stats-strip').innerHTML=`
     <div class="stat-item"><div class="stat-num">${st.t}</div><div class="stat-lbl">Clientes</div></div>
-    <div class="stat-item"><div class="stat-num s-amber">${st.byS['a_preencher']||0}</div><div class="stat-lbl">A preencher</div></div>
-    <div class="stat-item"><div class="stat-num">${st.byS['em_preenchimento']||0}</div><div class="stat-lbl">Preenchendo</div></div>
-    <div class="stat-item"><div class="stat-num">${st.byS['preenchida']||0}</div><div class="stat-lbl">Preenchidas</div></div>
     <div class="stat-item"><div class="stat-num s-green">${st.byS['transmitida']||0}</div><div class="stat-lbl">Transmitidas</div></div>
+    <div class="stat-item"><div class="stat-num s-amber">${(st.byS['a_preencher']||0)+(st.byS['em_preenchimento']||0)+(st.byS['preenchida']||0)}</div><div class="stat-lbl">Pendentes</div></div>
+    <div class="stat-item"><div class="stat-num s-orange">${st.byS['a_retificar']||0}</div><div class="stat-lbl">A retificar</div></div>
     <div class="stat-item"><div class="stat-num mono">R$&nbsp;${fmtBRL(st.tv)}</div><div class="stat-lbl">Honorários</div></div>
     <div class="stat-item"><div class="stat-num mono s-green">R$&nbsp;${fmtBRL(st.rv)}</div><div class="stat-lbl">Recebido</div></div>
-    <div class="stat-item"><div class="stat-num mono s-red">R$&nbsp;${fmtBRL(st.pn)}</div><div class="stat-lbl">A receber</div></div>`;
+    <div class="stat-item"><div class="stat-num mono s-red">R$&nbsp;${fmtBRL(st.pn)}</div><div class="stat-lbl">A receber</div></div>
+    <div class="stat-item"><div class="stat-num s-red">${unpaidCount}</div><div class="stat-lbl">Não pagos</div></div>`;
 
   const q=(document.getElementById('search-input')?.value||'').toLowerCase().trim();
-  let vis=filterStatus==='todos'?clients:clients.filter(c=>c.status===filterStatus);
+  let vis=clients;
+  if(filterStatus==='nao_pago')vis=vis.filter(c=>!c.pago);
+  else if(filterStatus!=='todos')vis=vis.filter(c=>c.status===filterStatus);
   if(q)vis=vis.filter(c=>c.nome.toLowerCase().includes(q)||(c.obs||'').toLowerCase().includes(q)||(c.cpf||'').includes(q));
   vis=getSorted(vis);
+
   if(!vis.length){document.getElementById('list').innerHTML='<div class="empty">Nenhum cliente encontrado.</div>';return;}
 
-  document.getElementById('list').innerHTML=vis.map(c=>{
-    const sm=SM[c.status]||SM['a_preencher'],av=avC(c.id),p=pct(c),pr=c.prioridade||99;
-    const opts=Object.entries(SM).map(([k,v])=>`<option value="${k}" ${c.status===k?'selected':''}>${v.label}</option>`).join('');
-    const chips=STEPS.map(s=>`<span class="chip ${(c.steps&&c.steps[s.id])?'done':''}" onclick="toggleStep(${c.id},'${s.id}')"><span class="chip-ico">${(c.steps&&c.steps[s.id])?'✓':s.ico}</span>${s.label}</span>`).join('');
-    const vt=c.valor?`<span class="val-tag">R$&nbsp;${c.valor}</span>`:'';
-    const pt2=c.valor?(c.pago?'<span class="pago-tag">✓ Pago</span>':'<span class="npago-tag">Não pago</span>'):'';
-    const hasCred=c.cpf||c.senha;
-    return`<div class="card ${c.pago&&c.valor?'pago-sim':''}" id="card-${c.id}">
-      <div class="card-head" onclick="toggleCard(${c.id})">
-        <div class="avatar" style="background:${av.bg};color:${av.c}">${ini(c.nome)}</div>
-        <div class="card-info"><div class="card-name">${c.nome}</div>
-          <div class="card-meta"><span class="pri-num">#${pr}</span><span class="tag">${c.tipo}</span><span class="tag-sep">·</span><span class="tag">${p}%</span>${vt}${pt2}</div>
-        </div>
-        <div class="card-right"><span class="status-pill" style="background:${sm.bg};color:${sm.color};border-color:${sm.border}">${sm.label}</span><span class="chevron">▾</span></div>
-      </div>
-      <div class="prog-wrap"><div class="prog-fill ${p===100?'full':''}" style="width:${p}%"></div></div>
-      <div class="card-body">
-        <div class="sec-lbl">Etapas do fluxo</div><div class="steps-row">${chips}</div>
-        <div class="divider"></div>
-        <div class="cred-box"><div class="cred-title">Acesso Gov.br</div>
-          <div class="fields-2" style="margin:0"><div class="fld"><div class="fld-lbl">CPF</div><input class="fld-input mono" type="text" id="cpf-${c.id}" value="${c.cpf||''}" placeholder="000.000.000-00" oninput="maskCPF(this)" maxlength="14"/></div>
-          <div class="fld"><div class="fld-lbl">Senha</div><input class="fld-input" type="password" id="senha-${c.id}" value="${c.senha||''}" placeholder="Não informada"/></div></div>
-          ${!hasCred?'<div class="no-cred">⚠️ Credenciais não informadas</div>':''}
-        </div>
-        <div class="fields-4">
-          <div class="fld"><div class="fld-lbl">Status</div><select class="fld-select" id="st-${c.id}">${opts}</select></div>
-          <div class="fld"><div class="fld-lbl">Honorários</div><input class="fld-input mono" type="text" id="val-${c.id}" value="${c.valor||''}" placeholder="0,00" oninput="maskMoney(this)"/></div>
-          <div class="fld"><div class="fld-lbl">Prioridade</div><input class="fld-input mono" type="number" id="pri-${c.id}" value="${pr}" min="1" max="999"/></div>
-          <div class="fld"><div class="fld-lbl">Prazo</div><input class="fld-input" type="date" id="pz-${c.id}" value="${c.prazo||''}"/></div>
-        </div>
-        <div class="fld" style="margin-bottom:8px"><div class="fld-lbl">Pagamento</div><div class="pago-toggle ${c.pago?'sim':''}" onclick="togglePago(${c.id})"><div class="pago-toggle-dot"></div><span class="pago-toggle-lbl">${c.pago?'✓ Recebido':'Pendente'}</span></div></div>
-        <div class="fld" style="margin-bottom:8px"><div class="fld-lbl">Observações</div><textarea class="fld-textarea" id="obs-${c.id}">${c.obs||''}</textarea></div>
-        <div class="actions">
-          <button class="btn-save" onclick="saveClient(${c.id})">💾 Salvar</button>
-          <span class="saved-msg" id="saved-${c.id}">✓ Salvo!</span>
-          <button class="btn-edit" onclick="editClient(${c.id})">✏️ Editar</button>
-          <button class="btn-del" onclick="openConfirm(${c.id})">🗑</button>
-        </div>
-        ${c.updated?`<div class="update-ts">Atualizado: ${fmtDate(c.updated)}</div>`:''}
-      </div>
-    </div>`;
-  }).join('');
+  // Split into active and transmitted for section headers
+  const sort=document.getElementById('sort-select')?.value||'smart';
+  if(sort==='smart'&&filterStatus==='todos'){
+    const active=vis.filter(c=>c.status!=='transmitida');
+    const transmitted=vis.filter(c=>c.status==='transmitida');
+    let html='';
+    if(active.length){
+      html+=`<div class="section-header">Pendentes / A retificar <span class="section-count">${active.length}</span></div>`;
+      html+='<div class="list">'+active.map(renderCard).join('')+'</div>';
+    }
+    if(transmitted.length){
+      html+=`<div class="section-header">Transmitidas <span class="section-count">${transmitted.length}</span></div>`;
+      html+='<div class="list">'+transmitted.map(renderCard).join('')+'</div>';
+    }
+    document.getElementById('list').innerHTML=html;
+  }else{
+    document.getElementById('list').innerHTML='<div class="list">'+vis.map(renderCard).join('')+'</div>';
+  }
 }
 
 onValue(dbRef,(snap)=>{
@@ -430,11 +475,8 @@ onValue(dbRef,(snap)=>{
       return{...c,prioridade:c.prioridade||99,cpf:c.cpf||'',senha:c.senha||'',empresa:c.empresa||'',steps:{...st,...(c.steps||{})}};
     });
     nextId=v.n||100;
-  }else if(firstLoad){
-    clients=JSON.parse(JSON.stringify(INIT));nextId=100;push();
-  }
-  firstLoad=false;
-  setSS('online','Sincronizado');render();
+  }else if(firstLoad){clients=[];nextId=100;}
+  firstLoad=false;setSS('online','Sincronizado');render();
 },(err)=>{setSS('offline','Erro');console.error(err);});
 
 document.getElementById('modal-bg').addEventListener('click',function(e){if(e.target===this)closeModal();});
